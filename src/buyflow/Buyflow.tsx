@@ -20,16 +20,7 @@ const PRODUCT_IDS_TO_NAMES = {
 
 const Buyflow: React.FC<BuyflowProps> = (props) => {
   const [currentStep, setStep] = useState('email')
-  const [collectedData, updateData] = useState({
-    name: undefined,
-    email: '',
-    age: 0,
-  })
-  const getNextStepCallback = (nextStep: string) => (
-    field: string,
-    value: any
-  ) => {
-    updateData((data) => ({ ...data, [field]: value }))
+  const getNextStepCallback = (nextStep: string) => () => {
     setStep(nextStep)
   }
   const getCurrentStep = () => {
@@ -64,7 +55,6 @@ const Buyflow: React.FC<BuyflowProps> = (props) => {
         return (
           <SummaryStep
             onPrev={() => setStep(prevStep)}
-            collectedData={collectedData}
             productId={props.productId}
           />
         )

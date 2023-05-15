@@ -1,20 +1,20 @@
 import React, { useState } from 'react'
 import Step from '../components/Step'
 import TextField from '../components/TextField'
+import { useUserInfo } from '../contexts/UserInfoProvider'
 
 interface NameStepProps {
-  onNext: (
-    field: string,
-    value: { firstName: string; lastName: string }
-  ) => void
+  onNext: () => void
   onPrev: () => void
 }
 
 const NameStep: React.FC<NameStepProps> = ({ onNext, onPrev }) => {
-  const [firstName, setFirstName] = useState('')
+  const { collectedData, onSetField } = useUserInfo()
+
+  const [firstName, setFirstName] = useState(collectedData.firstName ?? '')
   const [firstNameError, setFirstNameError] = useState('')
 
-  const [lastName, setLastName] = useState('')
+  const [lastName, setLastName] = useState(collectedData.lastName ?? '')
   const [lastNameError, setLastNameError] = useState('')
 
   const handleNext = () => {
@@ -35,7 +35,9 @@ const NameStep: React.FC<NameStepProps> = ({ onNext, onPrev }) => {
     }
 
     if (!hasError) {
-      onNext('name', { firstName, lastName })
+      onSetField('firstName', firstName)
+      onSetField('lastName', lastName)
+      onNext()
     }
   }
 

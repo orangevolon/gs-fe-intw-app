@@ -1,17 +1,24 @@
 import React, { useState } from 'react'
 import Step from '../components/Step'
 import TextField from '../components/TextField'
+import { useUserInfo } from '../contexts/UserInfoProvider'
 
 interface AgeStepProps {
-  onNext: (field: string, value: number) => void
+  onNext: () => void
   onPrev: () => void
 }
 
 const AgeStep: React.FC<AgeStepProps> = ({ onNext, onPrev }) => {
-  const [age, setAge] = useState(0)
+  const { collectedData, onSetField } = useUserInfo()
+  const [age, setAge] = useState(collectedData.age ?? 0)
+
+  const handleNext = () => {
+    onSetField('age', age)
+    onNext()
+  }
 
   return (
-    <Step onNext={() => onNext('age', age)} onPrev={onPrev}>
+    <Step onNext={handleNext} onPrev={onPrev}>
       <TextField
         label="Age"
         value={age}

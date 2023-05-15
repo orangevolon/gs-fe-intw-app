@@ -2,17 +2,21 @@ import React, { useState } from 'react'
 import Step from '../components/Step'
 import { useHistory } from 'react-router-dom'
 import TextField from '../components/TextField'
+import { useUserInfo } from '../contexts/UserInfoProvider'
 
 interface EmailStepProps {
-  onNext: (field: string, value: string) => void
+  onNext: () => void
 }
 
 const EmailStep: React.FC<EmailStepProps> = ({ onNext }) => {
-  const [email, setEmail] = useState('')
+  const { collectedData, onSetField } = useUserInfo()
   const history = useHistory()
 
+  const [email, setEmail] = useState(collectedData.email ?? '')
+
   const handleNext = () => {
-    onNext('email', email)
+    onSetField('email', email)
+    onNext()
   }
 
   const handlePrev = () => {

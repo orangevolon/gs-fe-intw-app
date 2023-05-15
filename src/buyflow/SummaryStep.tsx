@@ -2,29 +2,28 @@ import React from 'react'
 import { useHistory } from 'react-router-dom'
 import Step from '../components/Step'
 import ReadOnlyField from '../components/ReadOnlyField'
+import { useUserInfo } from '../contexts/UserInfoProvider'
 
 interface SummaryStepProps {
   onPrev: () => void
   productId: string
-  collectedData: {
-    name?: { firstName: string; lastName: string }
-    email: string
-    age: number
-  }
 }
 
-const SummaryStep: React.FC<SummaryStepProps> = ({
-  onPrev,
-  collectedData,
-  productId,
-}) => {
+const SummaryStep: React.FC<SummaryStepProps> = ({ onPrev, productId }) => {
+  const { collectedData } = useUserInfo()
+
   const history = useHistory()
 
   const handleDone = () => {
     history.push(`/purchased=${productId}`)
   }
 
-  const summaryList = buildSummaryList(collectedData)
+  const summaryList = Object.entries(collectedData)
+    .filter(([_, value]) => Boolean(value))
+    .map(([key, value]) => ({
+      label: fieldKeyToLabel[key],
+      value,
+    }))
 
   return (
     <Step onPrev={onPrev} onDone={handleDone} doneLabel="Purchase">
@@ -37,16 +36,9 @@ const SummaryStep: React.FC<SummaryStepProps> = ({
 
 export default SummaryStep
 
-const buildSummaryList = (collectedData: SummaryStepProps['collectedData']) => {
-  const list = [
-    { label: 'Email', value: collectedData.email },
-    { label: 'Age', value: collectedData.age },
-  ]
-
-  if (collectedData.name) {
-    list.push({ label: 'First name', value: collectedData.name.firstName })
-    list.push({ label: 'Last name', value: collectedData.name.lastName })
-  }
-
-  return list
+const fieldKeyToLabel: Record<string, string> = {
+  firstName: 'First name',
+  lastName: 'Last name',
+  email: 'Email',
+  age: 'Age',
 }
