@@ -1,7 +1,10 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
+import Step from '../components/Step'
 
 interface SummaryStepProps {
+  onPrev: () => void
+  productId: string
   collectedData: {
     name?: { firstName: string; lastName: string }
     email: string
@@ -9,21 +12,28 @@ interface SummaryStepProps {
   }
 }
 
-const SummaryStep: React.FC<SummaryStepProps> = (props) => {
+const SummaryStep: React.FC<SummaryStepProps> = ({
+  onPrev,
+  collectedData,
+  productId,
+}) => {
+  const history = useHistory()
+
+  const handleDone = () => {
+    history.push(`/purchased=${productId}`)
+  }
+
   return (
-    <>
-      <div>Email: {props.collectedData.email}</div>
-      <div>Age: {props.collectedData.age}</div>
-      {props.collectedData.name && (
+    <Step onPrev={onPrev} onDone={handleDone} doneLabel="Purchase">
+      <div>Email: {collectedData.email}</div>
+      <div>Age: {collectedData.age}</div>
+      {collectedData.name && (
         <>
-          <div>First name: {props.collectedData.name.firstName}</div>
-          <div>Last name: {props.collectedData.name.lastName}</div>
+          <div>First name: {collectedData.name.firstName}</div>
+          <div>Last name: {collectedData.name.lastName}</div>
         </>
       )}
-      <div>
-        <Link to="/purchased=dev_ins">Purchase</Link>
-      </div>
-    </>
+    </Step>
   )
 }
 

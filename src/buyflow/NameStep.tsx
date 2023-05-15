@@ -1,13 +1,15 @@
 import React, { useState } from 'react'
+import Step from '../components/Step'
 
 interface NameStepProps {
   onNext: (
     field: string,
     value: { firstName: string; lastName: string }
   ) => void
+  onPrev: () => void
 }
 
-const NameStep: React.FC<NameStepProps> = (props) => {
+const NameStep: React.FC<NameStepProps> = ({ onNext, onPrev }) => {
   const [firstName, setFirstName] = useState('')
   const [firstNameError, setFirstNameError] = useState('')
 
@@ -32,12 +34,12 @@ const NameStep: React.FC<NameStepProps> = (props) => {
     }
 
     if (!hasError) {
-      props.onNext('name', { firstName, lastName })
+      onNext('name', { firstName, lastName })
     }
   }
 
   return (
-    <>
+    <Step onNext={handleNext} onPrev={onPrev}>
       <div>
         First name:{' '}
         <input
@@ -61,8 +63,7 @@ const NameStep: React.FC<NameStepProps> = (props) => {
         />
         {lastNameError && <div>{lastNameError}</div>}
       </div>
-      <button onClick={handleNext}>Next</button>
-    </>
+    </Step>
   )
 }
 
