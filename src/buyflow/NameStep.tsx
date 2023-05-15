@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import Step from '../components/Step'
+import TextField from '../components/TextField'
 
 interface NameStepProps {
   onNext: (
@@ -40,29 +41,20 @@ const NameStep: React.FC<NameStepProps> = ({ onNext, onPrev }) => {
 
   return (
     <Step onNext={handleNext} onPrev={onPrev}>
-      <div>
-        First name:{' '}
-        <input
-          type="text"
-          onChange={({ target: { value } }) => {
-            setFirstName(value.trim())
-          }}
-          value={firstName}
-          required
-        />
-        {firstNameError && <div>{firstNameError}</div>}
-      </div>
-      <div>
-        Last name:{' '}
-        <input
-          type="text"
-          onChange={({ target: { value } }) => {
-            setLastName(value.trim())
-          }}
-          value={lastName}
-        />
-        {lastNameError && <div>{lastNameError}</div>}
-      </div>
+      <TextField
+        label="First name"
+        value={firstName}
+        onChange={(value) => setFirstName(value)}
+        id="first-name"
+        error={firstNameError}
+      />
+      <TextField
+        label="Last name"
+        value={lastName}
+        onChange={(value) => setLastName(value)}
+        id="last-name"
+        error={lastNameError}
+      />
     </Step>
   )
 }

@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import Step from '../components/Step'
 import { useHistory } from 'react-router-dom'
+import TextField from '../components/TextField'
 
 interface EmailStepProps {
   onNext: (field: string, value: string) => void
@@ -20,14 +21,12 @@ const EmailStep: React.FC<EmailStepProps> = ({ onNext }) => {
 
   return (
     <Step onNext={handleNext} onPrev={handlePrev}>
-      Email:{' '}
-      <input
-        type="email"
-        onChange={({ target: { value } }) => {
-          setEmail(value)
-        }}
+      <TextField
+        label="Email"
         value={email}
-      ></input>
+        onChange={(value) => setEmail(value)}
+        id="email"
+      />
     </Step>
   )
 }

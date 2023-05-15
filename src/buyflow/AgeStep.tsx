@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import Step from '../components/Step'
+import TextField from '../components/TextField'
 
 interface AgeStepProps {
   onNext: (field: string, value: number) => void
@@ -11,14 +12,12 @@ const AgeStep: React.FC<AgeStepProps> = ({ onNext, onPrev }) => {
 
   return (
     <Step onNext={() => onNext('age', age)} onPrev={onPrev}>
-      Age:{' '}
-      <input
-        type="number"
-        onChange={({ target: { value } }) => {
-          setAge(Number(value))
-        }}
+      <TextField
+        label="Age"
         value={age}
-      ></input>
+        onChange={(value) => setAge(value)}
+        id="age"
+      />
     </Step>
   )
 }
