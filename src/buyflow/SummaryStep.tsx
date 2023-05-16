@@ -1,23 +1,41 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
+import Step from '../components/Step'
+import ReadOnlyField from '../components/ReadOnlyField'
+import { useUserInfo } from '../contexts/UserInfoProvider'
+import useBuyFlow from '../hooks/useBuyFlow'
 
-interface SummaryStepProps {
-  collectedData: {
-    email: string
-    age: number
+const SummaryStep: React.FC = () => {
+  const { onPrev, productId } = useBuyFlow()
+  const { collectedData } = useUserInfo()
+
+  const history = useHistory()
+
+  const handleDone = () => {
+    history.push(`/purchased=${productId}`)
   }
-}
 
-const SummaryStep: React.FC<SummaryStepProps> = (props) => {
+  const summaryList = Object.entries(collectedData)
+    .filter(([_, value]) => Boolean(value))
+    .map(([key, value]) => ({
+      label: fieldKeyToLabel[key],
+      value,
+    }))
+
   return (
-    <>
-      <div>Email: {props.collectedData.email}</div>
-      <div>Age: {props.collectedData.age}</div>
-      <div>
-        <Link to="/purchased=dev_ins">Purchase</Link>
-      </div>
-    </>
+    <Step onPrev={onPrev} onDone={handleDone} doneLabel="Purchase">
+      {summaryList.map(({ label, value }) => (
+        <ReadOnlyField key={label} label={label} value={value} />
+      ))}
+    </Step>
   )
 }
 
 export default SummaryStep
+
+const fieldKeyToLabel: Record<string, string> = {
+  firstName: 'First name',
+  lastName: 'Last name',
+  email: 'Email',
+  age: 'Age',
+}
