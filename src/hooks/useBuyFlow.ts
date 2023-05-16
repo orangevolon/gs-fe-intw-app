@@ -39,43 +39,29 @@ const useBuyFlow = () => {
     return flow.includes(routeSegment) ? routeSegment : flow[0]
   }
 
+  const goToAdjacentRoute = (offset: number) => {
+    if (!currentFlow || !currentRoute) {
+      console.warn(`No flow found for product: ${productId}`)
+      return
+    }
+
+    const currentIndex = currentFlow.indexOf(currentRoute)
+    const adjRoute = currentFlow[currentIndex + offset]
+    if (!adjRoute) {
+      history.push(RETURN_PATH)
+      return
+    }
+
+    const adjPath = buildPath(adjRoute)
+    history.push(adjPath)
+  }
+
   const currentFlow = flows[productId]
   const initialRoute = currentFlow?.[0]
   const currentRoute = getCurrentRoute(currentFlow)
 
-  const onNext = () => {
-    if (!currentFlow || !currentRoute) {
-      console.warn(`No flow found for product: ${productId}`)
-      return
-    }
-
-    const currentIndex = currentFlow.indexOf(currentRoute)
-    const nextRoute = currentFlow[currentIndex + 1]
-    if (!nextRoute) {
-      history.push(RETURN_PATH)
-      return
-    }
-
-    const nextPath = buildPath(nextRoute)
-    history.push(nextPath)
-  }
-
-  const onPrev = () => {
-    if (!currentFlow || !currentRoute) {
-      console.warn(`No flow found for product: ${productId}`)
-      return
-    }
-
-    const currentIndex = currentFlow.indexOf(currentRoute)
-    const prevRoute = currentFlow[currentIndex - 1]
-    if (!prevRoute) {
-      history.push(RETURN_PATH)
-    }
-
-    const prevPath = buildPath(prevRoute)
-    history.push(prevPath)
-  }
-
+  const onNext = () => goToAdjacentRoute(1)
+  const onPrev = () => goToAdjacentRoute(-1)
   const initialPath = buildPath(initialRoute)
 
   return { onNext, onPrev, productId, initialPath }
