@@ -3,13 +3,10 @@ import { useHistory } from 'react-router-dom'
 import Step from '../components/Step'
 import ReadOnlyField from '../components/ReadOnlyField'
 import { useUserInfo } from '../contexts/UserInfoProvider'
+import useBuyFlow from '../hooks/useBuyFlow'
 
-interface SummaryStepProps {
-  onPrev: () => void
-  productId: string
-}
-
-const SummaryStep: React.FC<SummaryStepProps> = ({ onPrev, productId }) => {
+const SummaryStep: React.FC = () => {
+  const { onPrev, productId } = useBuyFlow()
   const { collectedData } = useUserInfo()
 
   const history = useHistory()

@@ -2,13 +2,10 @@ import React, { useState } from 'react'
 import Step from '../components/Step'
 import TextField from '../components/TextField'
 import { useUserInfo } from '../contexts/UserInfoProvider'
+import useBuyFlow from '../hooks/useBuyFlow'
 
-interface AgeStepProps {
-  onNext: () => void
-  onPrev: () => void
-}
-
-const AgeStep: React.FC<AgeStepProps> = ({ onNext, onPrev }) => {
+const AgeStep: React.FC = () => {
+  const { onNext, onPrev } = useBuyFlow()
   const { collectedData, onSetField } = useUserInfo()
   const [age, setAge] = useState(collectedData.age ?? 0)
 

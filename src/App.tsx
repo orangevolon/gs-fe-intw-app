@@ -1,9 +1,9 @@
-import React from 'react'
 import logo from './logo.svg'
 import './App.css'
-import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom'
-import Buyflow, { ProductIds } from './buyflow/Buyflow'
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
+import BuyFlowScreen from './screens/BuyFlowScreen'
 import UserInfoProvider from './contexts/UserInfoProvider'
+import HomeScreen from './screens/HomeScreen'
 
 const App = () => {
   return (
@@ -14,18 +14,8 @@ const App = () => {
             <img src={logo} className="App-logo" alt="logo" />
           </header>
           <Switch>
-            <Route path="/buy/insurance_dev">
-              <Buyflow productId={ProductIds.devIns} />
-            </Route>
-            <Route path="/buy/insurance_des">
-              <Buyflow productId={ProductIds.desIns} />
-            </Route>
-            <Route path="/">
-              <p>Welcome to Getsafe's Insurance</p>
-              <Link to="/buy/insurance_dev">Developer insurance</Link>
-              {' | '}
-              <Link to="/buy/insurance_des">Designer insurance</Link>
-            </Route>
+            <Route path="/buy/:productId" component={BuyFlowScreen} />
+            <Route path="/" component={HomeScreen} />
           </Switch>
         </div>
       </Router>
